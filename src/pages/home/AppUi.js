@@ -6,6 +6,7 @@ import { TodoItem } from "../../components/TodoItem";
 import { TodosLoading } from "../../components/TodosLoading";
 import { TodosError } from "../../components/TodosError";
 import { TodosEmpty } from "../../components/TodosEmpty";
+import { TodosCompleted } from "../../components/TodosCompleted";
 import { TodoContext } from "../../Hooks/TodoContext";
 import { TodoModal } from "../../components/Modal";
 import { TodoForm } from "../../components/TodoForm";
@@ -15,6 +16,8 @@ function AppUI() {
   const {
     error,
     loading,
+    existedTodos,
+    completedTodos,
     searchedTodos,
     completeTodo,
     deleteTodo,
@@ -33,7 +36,8 @@ function AppUI() {
           </>
         )}
         {error && <TodosError />}
-        {!loading && !error && searchedTodos.length === 0 && <TodosEmpty />}
+        {!loading && !error && !existedTodos && <TodosEmpty />}
+        {!loading && !error && completedTodos > 0 && existedTodos === completedTodos && <TodosCompleted />}
         {searchedTodos.map((todo) => (
           <TodoItem
             key={todo.text}

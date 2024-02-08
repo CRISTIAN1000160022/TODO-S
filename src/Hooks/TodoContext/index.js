@@ -1,5 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import React, { createContext, useState } from "react";
 import { useLocalStorage } from "../useLocalStorage";
 
 const TodoContext = createContext();
@@ -14,6 +13,7 @@ function TodoProvider({ children }) {
   const [searchValue, setSearchValue] = useState("");
   const [openModal, setOpenModal] = useState(false);
 
+  const existedTodos = todos.filter((todo) => !!todo).length;
   const completedTodos = todos.filter((todo) => !!todo.completed).length;
   const totalTodos = todos.length;
 
@@ -46,25 +46,13 @@ function TodoProvider({ children }) {
     saveTodos(newTodos);
   };
 
-  useEffect(() => {
-    const finalizedTodos = () => {
-      if (completedTodos === todos.length && completedTodos > 0) {
-        Swal.fire({
-          text: "Felicidades, has completado todos tus pendientes",
-          icon: "success",
-          timer: 5000,
-        });
-      }
-    };
-
-    finalizedTodos();
-  }, [todos, completedTodos]);
   return (
     <TodoContext.Provider
       value={{
         loading,
         error,
         totalTodos,
+        existedTodos,
         completedTodos,
         searchValue,
         setSearchValue,
